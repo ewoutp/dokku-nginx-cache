@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ $DOKKU_TRACE ]] && set -x
+
+APP="$1"
+PORT="$2"
+
+sed 's/upstream.*$/\0\nproxy_cache_path /var/cache/nginx keys_zone=Dokku:10m;/g' $DOKKU_ROOT/$APP/nginx.conf > $DOKKU_ROOT/$APP/nginx.conf
+sed 's/proxy_pass.*$/\0\nproxy_cache Dokku;/g' $DOKKU_ROOT/$APP/nginx.conf > $DOKKU_ROOT/$APP/nginx.conf
